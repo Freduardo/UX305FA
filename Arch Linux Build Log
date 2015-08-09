@@ -53,3 +53,23 @@ passwd
 # set the root password
 
 ## Bootloader
+pacman -S dosfstools
+bootctl --path=/boot install
+nano /boot/loader/entries/arch.conf
+# title          Arch Linux
+# linux          /vmlinuz-linux
+# initrd         /initramfs-linux.img
+# options        root=/dev/sda2 rw
+# save and exit
+nano /boot/loader/loader.conf\
+# timeout 10
+# default arch
+# save and exit
+
+## Network
+pacman -S dialog iw wpa_supplicant
+
+## Shutdown
+exit
+umount -R /mnt
+reboot
