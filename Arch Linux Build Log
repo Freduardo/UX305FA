@@ -1,1 +1,55 @@
+## Boot up
+loadkeys us-acentos
+wifi-menu
+# connect to essid
+timedatectl set-ntp true
 
+## Partitioning
+lsblk
+# /dev/sda 465.8G will be the hard drive
+parted /dev/sda
+mklabel gpt
+mkpart ESP fat32 1MiB 513MiB
+set 1 boot on
+mkpart primary ext4 513MiB 24.5GiB
+mkpart primary ext4 24.5GiB 100%
+quit
+lsblk /dev/sda
+mkfs.ext4 /dev/sda2
+mkfs.ext4 /dev/sda3
+mkfs.vfat -F32 /dev/sda1
+mount /dev/sda2 /mnt
+mkdir -p /mnt/home
+mount /dev/sda3 /mnt/home
+
+## Selecting mirror
+nano /etc/pacman.d/mirrorlist
+# put ftp.nluug.nl first, removed some US ones
+# save and exit
+pacman -Sy
+
+## Installing base
+pacstrap -i /mnt base base-devel
+genfstab -U /mnt > /mnt/etc/fstab
+cat /mnt/etc/fstab
+arch-chroot /mnt /bin/bash
+
+## Basic setup
+nano /etc/locale.gen
+# uncomment en_US.UTF-8 UTF-8
+# save and exit
+locale-gen
+echo LANG=en_US.UTF-8 > /etc/locale.conf
+nano /etc/vconsole.conf
+KEYMAP=us-acentos
+#save and exit
+ln -sf /usr/share/zoneinfo/Europe/Brussels /etc/localtime
+hwclock --systohc --utc
+echo Littlebottom > /etc/hostname
+nano /etc/hosts
+# add Littlebottom at the end of both lines
+# save and exit
+passwd
+# set the root password
+
+## Bootloader
