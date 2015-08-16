@@ -86,3 +86,12 @@ EDITOR=nano visudo
 ## Repositories
 nano /etc/pacman.conf
 # enable multilib lines
+
+## Intel Microcode
+pacman -S intel-ucode
+nano /boot/loader/entries/arch.conf
+# add line
+# initrd  /intel-ucode.img
+# before
+# initrd  /initramfs-linux.img
+# save and exit
