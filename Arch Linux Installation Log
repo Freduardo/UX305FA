@@ -75,3 +75,14 @@ pacman -S dialog iw wpa_supplicant
 exit
 umount -R /mnt
 reboot
+
+## User Management
+useradd -m -g users -G wheel <username>
+passwd <username>
+pacman -S sudo
+EDITOR=nano visudo
+# uncomment %wheel ALL=(ALL) ALL
+
+## Repositories
+nano /etc/pacman.conf
+# enable multilib lines
